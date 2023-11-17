@@ -14,15 +14,16 @@ function AddTodo() {
  };
 
  return (
-   <form onSubmit={handleSubmit} className="p-4">
+   <form onSubmit={handleSubmit} className="mt-10 p-4">
+    <h2 className='text-center text-lg mb-4 font-extrabold'>Redux TodoList</h2>
      <input
        type="text"
        value={input}
        onChange={(e) => setInput(e.target.value)}
-       className="border rounded p-2"
+       className="border rounded p-2 w-[30rem]"
        placeholder="Add todo"
      />
-     <button type="submit" className="bg-blue-500 text-white p-2 ml-2 rounded">
+     <button type="submit" className="bg-blue-500 text-white p-2 ml-2 w-[5rem] rounded">
        Add
      </button>
    </form>
