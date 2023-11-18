@@ -1,7 +1,26 @@
+// todoslice.js
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 
+const loadTodosFromLocalStorage = () => {
+  try {
+    const storedTodos = localStorage.getItem('todos');
+    return storedTodos ? JSON.parse(storedTodos) : [];
+  } catch (error) {
+    console.error('Error loading todos from local storage:', error);
+    return [];
+  }
+};
+
+const saveTodosToLocalStorage = (todos) => {
+  try {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  } catch (error) {
+    console.error('Error saving todos to local storage:', error);
+  }
+};
+
 const initialState = {
-  todos: [],
+  todos: loadTodosFromLocalStorage(),
 };
 
 export const todoSlice = createSlice({
@@ -14,21 +33,24 @@ export const todoSlice = createSlice({
         text: action.payload,
       };
       state.todos.push(todo);
+      saveTodosToLocalStorage(state.todos);
     },
     removeTodo: (state, action) => {
       state.todos = state.todos.filter((todo) => todo.id !== action.payload);
+      saveTodosToLocalStorage(state.todos);
     },
     updateTodo: (state, action) => {
       const index = state.todos.findIndex((todo) => todo.id === action.payload.id);
       if (index !== -1) {
         state.todos[index].text = action.payload.text;
-        state.todos[index].editing = false; // Set editing to false after update
+        state.todos[index].editing = false;
+        saveTodosToLocalStorage(state.todos);
       }
     },
     editTodo: (state, action) => {
       const index = state.todos.findIndex((todo) => todo.id === action.payload);
       if (index !== -1) {
-        state.todos[index].editing = true; // Set editing to true when starting to edit
+        state.todos[index].editing = true;
       }
     },
   },
@@ -36,6 +58,7 @@ export const todoSlice = createSlice({
 
 export const { addTodo, removeTodo, updateTodo, editTodo } = todoSlice.actions;
 export default todoSlice.reducer;
+
 
 
 // import { createSlice, nanoid } from '@reduxjs/toolkit';
@@ -61,11 +84,19 @@ export default todoSlice.reducer;
 //     updateTodo: (state, action) => {
 //       const index = state.todos.findIndex((todo) => todo.id === action.payload.id);
 //       if (index !== -1) {
-//         state.todos[index] = action.payload;
+//         state.todos[index].text = action.payload.text;
+//         state.todos[index].editing = false; 
+//       }
+//     },
+//     editTodo: (state, action) => {
+//       const index = state.todos.findIndex((todo) => todo.id === action.payload);
+//       if (index !== -1) {
+//         state.todos[index].editing = true; 
 //       }
 //     },
 //   },
 // });
 
-// export const { addTodo, removeTodo, updateTodo } = todoSlice.actions;
+// export const { addTodo, removeTodo, updateTodo, editTodo } = todoSlice.actions;
 // export default todoSlice.reducer;
+

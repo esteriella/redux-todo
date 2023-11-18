@@ -10,6 +10,13 @@ function Todos() {
 
   const [editText, setEditText] = useState(""); // State to handle edited text
 
+  const handleEdit = (todo) => {
+    //set the initial text of the todo to the editText state
+    setEditText(todo.text);
+    //Dispatch editTodo action to set editing to true for the todo
+    dispatch(editTodo(todo.id));
+  };
+
   const handleUpdate = (todo) => {
     // Dispatch updateTodo with the edited text
     dispatch(updateTodo({ id: todo.id, text: editText }));
@@ -22,7 +29,7 @@ function Todos() {
       <h4 className="text-base font-bold mb-4">Todos</h4>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id} className="flex flex-row gap-4 items-center justify-center">
+          <li key={todo.id} className="flex flex-row gap-4 items-center justify-center mb-5">
             <span className="">{todo.text}</span>
             {/* Conditionally render input for editing */}
             {todo.editing ? (
@@ -45,7 +52,7 @@ function Todos() {
                   Remove
                 </button>
                 <button
-                  onClick={() => dispatch(editTodo(todo.id))}
+                  onClick={() => handleEdit(todo)}
                   className="bg-blue-500 text-white p-2 w-[5rem] rounded"
                 >
                   Edit
